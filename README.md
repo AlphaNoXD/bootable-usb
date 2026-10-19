@@ -1,6 +1,6 @@
 # Bootable USB Drive Classroom Lesson
 
-A minimal, clean, human-designed classroom video lesson website. Features a native HTML5 video player streaming directly from Cloudflare R2 on the right, paired with a **Spotify-lyrics-style live synchronized timestamp stream** on the left and a dedicated **Fullscreen Lesson Mode**.
+A minimal, clean, human-designed classroom video lesson website. Features a native HTML5 video player streaming directly from Cloudflare R2 on the right, paired with a **Spotify-lyrics-style live synchronized timestamp stream** on the left.
 
 ---
 
@@ -18,17 +18,9 @@ A minimal, clean, human-designed classroom video lesson website. Features a nati
    - Steps above and below fade gracefully based on their distance from the active step, complemented by top and bottom gradient masks.
    - Clicking any step immediately jumps the video to that exact timestamp.
 
-3. **Fullscreen Lesson Mode (Entire Interface)**:
-   - Expanding fullscreen expands the **entire lesson player** rather than just the video.
-   - **Translucent Spotify Overlay**: In fullscreen mode, the timestamp instructions float as a sleek, translucent panel on the left side of the screen over the video.
-   - **Auto-Hide (4-Second Timer)**: Overlay automatically fades out after 4 seconds of inactivity so the video remains unobstructed.
-   - **Smart Wake-Up**: When playback reaches a new lesson timestamp, the overlay automatically fades back in for 4 seconds so the learner can read the new instruction. Moving the mouse, tapping the screen, or interacting also brings it back.
-   - **Keep Steps Visible (Pin Toggle)**: Click the "Keep visible" / "Auto-hide" toggle inside the overlay header to lock the timestamps on-screen permanently during fullscreen.
-   - **Keyboard Shortcut**: Press <kbd>F</kbd> anytime to toggle fullscreen lesson mode (or press <kbd>Esc</kbd> to exit).
-
-4. **Mobile & Landscape Responsive**:
-   - On phones and tablets, the fullscreen mode displays cleanly in landscape and portrait without forcing rotation.
-   - In landscape fullscreen, the compact translucent timestamp panel sits on the left with native video controls fully accessible at the bottom.
+3. **Expanded Desktop Layout**:
+   - Uses up to 96% of the desktop viewport (30% for steps, 70% for the video).
+   - Generous video sizing with no narrow column restrictions.
 
 ---
 
@@ -81,7 +73,7 @@ To adjust timestamps or add new steps:
 1. **Commit and push files**:
    ```bash
    git add index.html style.css script.js README.md
-   git commit -m "Add fullscreen lesson mode with Spotify-style timestamp overlay"
+   git commit -m "Keep simple layout with wide desktop video and live synchronized timestamps"
    git push origin main
    ```
 

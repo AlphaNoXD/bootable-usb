@@ -33,11 +33,6 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Prevent body scrolling when simulated fullscreen is active */
-body.fullscreen-active {
-  overflow: hidden !important;
-}
-
 /* ==========================================================================
    PAGE CONTAINER - EXPANDED TO 96% VIEWPORT ON DESKTOP
    ========================================================================== */
@@ -82,7 +77,6 @@ body.fullscreen-active {
   align-items: stretch;
   flex: 1;
   width: 100%;
-  position: relative;
 }
 
 /* ==========================================================================
@@ -106,7 +100,6 @@ body.fullscreen-active {
   border-bottom: 1px solid var(--border-subtle);
   font-size: 0.85rem;
   flex-shrink: 0;
-  gap: 10px;
 }
 
 .transcript-label {
@@ -116,45 +109,9 @@ body.fullscreen-active {
   color: var(--text-muted);
 }
 
-.transcript-header-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .transcript-status {
   color: var(--text-dim);
   font-size: 0.8rem;
-}
-
-/* Pin / Always-Visible Toggle Button */
-.pin-overlay-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-muted);
-  border-radius: 6px;
-  padding: 3px 8px;
-  font-size: 0.76rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  user-select: none;
-}
-
-.pin-overlay-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--text-main);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.pin-overlay-btn[aria-pressed="true"],
-.pin-overlay-btn.active {
-  background: var(--accent-soft);
-  color: var(--accent);
-  border-color: var(--accent);
 }
 
 /* Scroll container with Spotify-lyrics vertical fade mask */
@@ -166,6 +123,7 @@ body.fullscreen-active {
   position: relative;
   scroll-behavior: smooth;
   outline: none;
+  /* Top and bottom gradient fade mask */
   mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
 }
@@ -284,7 +242,6 @@ body.fullscreen-active {
   gap: 12px;
   width: 100%;
   min-width: 0;
-  position: relative;
 }
 
 .video-wrapper {
@@ -311,55 +268,6 @@ body.fullscreen-active {
   outline: none;
 }
 
-/* Floating Player Toolbar (Fullscreen Lesson Button) */
-.player-floating-bar {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  opacity: 0.85;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.video-wrapper:hover .player-floating-bar {
-  opacity: 1;
-}
-
-.fullscreen-action-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(14, 18, 26, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-  user-select: none;
-}
-
-.fullscreen-action-btn:hover {
-  background: rgba(22, 28, 40, 0.95);
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-1px);
-}
-
-.fullscreen-action-btn:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
 /* Small, plain error message */
 .video-error-message {
   padding: 12px 16px;
@@ -369,116 +277,6 @@ body.fullscreen-active {
   color: #fca5a5;
   font-size: 0.84rem;
   line-height: 1.45;
-}
-
-/* ==========================================================================
-   FULLSCREEN LESSON MODE (ENTIRE PLAYER & TIMESTAMPS TOGETHER)
-   ========================================================================== */
-/* Triggers when #lessonWorkspace is in HTML5 Fullscreen or .is-fullscreen class */
-#lessonWorkspace:fullscreen,
-#lessonWorkspace:-webkit-full-screen,
-#lessonWorkspace.is-fullscreen {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  z-index: 99999 !important;
-  background: #000000 !important;
-  display: block !important;
-  overflow: hidden !important;
-}
-
-/* In fullscreen, video expands to full viewport size */
-#lessonWorkspace:fullscreen .player-section,
-#lessonWorkspace:-webkit-full-screen .player-section,
-#lessonWorkspace.is-fullscreen .player-section {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  z-index: 1 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-#lessonWorkspace:fullscreen .video-wrapper,
-#lessonWorkspace:-webkit-full-screen .video-wrapper,
-#lessonWorkspace.is-fullscreen .video-wrapper {
-  width: 100% !important;
-  height: 100% !important;
-  aspect-ratio: unset !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  background: #000000 !important;
-}
-
-#lessonWorkspace:fullscreen .lesson-video,
-#lessonWorkspace:-webkit-full-screen .lesson-video,
-#lessonWorkspace.is-fullscreen .lesson-video {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  background: #000000 !important;
-}
-
-/* Floating exit button in fullscreen */
-#lessonWorkspace:fullscreen .player-floating-bar,
-#lessonWorkspace:-webkit-full-screen .player-floating-bar,
-#lessonWorkspace.is-fullscreen .player-floating-bar {
-  top: 20px !important;
-  right: 24px !important;
-  z-index: 30 !important;
-}
-
-/* Fullscreen floating overlay on the LEFT */
-#lessonWorkspace:fullscreen .transcript-section,
-#lessonWorkspace:-webkit-full-screen .transcript-section,
-#lessonWorkspace.is-fullscreen .transcript-section {
-  position: absolute !important;
-  left: 28px !important;
-  top: 24px !important;
-  bottom: 84px !important; /* Leaves room above native video controls */
-  width: clamp(320px, 32vw, 460px) !important;
-  z-index: 20 !important;
-  background: rgba(11, 14, 20, 0.78) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border-radius: 14px !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65) !important;
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: auto;
-}
-
-/* Auto-hide / Faded overlay state */
-#lessonWorkspace:fullscreen .transcript-section.overlay-faded:not(.is-pinned),
-#lessonWorkspace:-webkit-full-screen .transcript-section.overlay-faded:not(.is-pinned),
-#lessonWorkspace.is-fullscreen .transcript-section.overlay-faded:not(.is-pinned) {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translateX(-12px) !important;
-}
-
-/* Adjust padding inside fullscreen overlay container */
-#lessonWorkspace:fullscreen .steps-list-container,
-#lessonWorkspace:-webkit-full-screen .steps-list-container,
-#lessonWorkspace.is-fullscreen .steps-list-container {
-  padding: 80px 14px 100px 4px !important;
-}
-
-#lessonWorkspace:fullscreen .transcript-header,
-#lessonWorkspace:-webkit-full-screen .transcript-header,
-#lessonWorkspace.is-fullscreen .transcript-header {
-  padding: 12px 14px 10px 14px !important;
 }
 
 /* ==========================================================================
@@ -509,7 +307,7 @@ body.fullscreen-active {
   }
 }
 
-/* Mobile (<= 768px) - Preserved unchanged */
+/* Mobile (<= 768px) */
 @media (max-width: 768px) {
   .page-container {
     width: 100%;
@@ -557,36 +355,5 @@ body.fullscreen-active {
 
   .step-item.active .step-text {
     font-size: 1.1rem;
-  }
-
-  /* Mobile Fullscreen Adjustments */
-  #lessonWorkspace:fullscreen .player-floating-bar,
-  #lessonWorkspace:-webkit-full-screen .player-floating-bar,
-  #lessonWorkspace.is-fullscreen .player-floating-bar {
-    top: 12px !important;
-    right: 12px !important;
-  }
-
-  #lessonWorkspace:fullscreen .transcript-section,
-  #lessonWorkspace:-webkit-full-screen .transcript-section,
-  #lessonWorkspace.is-fullscreen .transcript-section {
-    left: 12px !important;
-    top: 12px !important;
-    bottom: 74px !important;
-    width: clamp(260px, 48vw, 360px) !important;
-  }
-
-  /* Compact layout for very narrow phones in fullscreen */
-  @media (orientation: portrait) {
-    #lessonWorkspace:fullscreen .transcript-section,
-    #lessonWorkspace:-webkit-full-screen .transcript-section,
-    #lessonWorkspace.is-fullscreen .transcript-section {
-      left: 10px !important;
-      right: 10px !important;
-      width: auto !important;
-      max-height: 42vh !important;
-      top: auto !important;
-      bottom: 68px !important;
-    }
   }
 }

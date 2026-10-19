@@ -15,29 +15,13 @@
         <p class="lesson-subtitle">y'all can follow the timestamps :D</p>
       </header>
 
-      <!-- Main Layout & Fullscreen Lesson Workspace -->
-      <main id="lessonWorkspace" class="lesson-layout">
-        <!-- Left: Spotify-style Synchronized Steps List (Becomes floating translucent overlay in fullscreen) -->
-        <section id="transcriptSection" class="transcript-section" aria-label="Lesson steps">
+      <!-- Main Layout: Spotify-style Timestamps (Left) & Video (Right) -->
+      <main class="lesson-layout">
+        <!-- Left: Spotify-style Synchronized Steps List -->
+        <section class="transcript-section" aria-label="Lesson steps">
           <div class="transcript-header">
             <span class="transcript-label">steps</span>
-            <div class="transcript-header-controls">
-              <!-- Always-visible / Auto-hide Toggle Button -->
-              <button
-                id="pinOverlayBtn"
-                type="button"
-                class="pin-overlay-btn"
-                title="Toggle keep steps visible in fullscreen mode"
-                aria-pressed="false"
-              >
-                <svg class="pin-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 17v5"></path>
-                  <path d="M5 17h14v-2l-3-3V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v7l-3 3v2z"></path>
-                </svg>
-                <span id="pinBtnLabel" class="pin-label">auto-hide</span>
-              </button>
-              <span id="activeStepIndicator" class="transcript-status">Click a step to jump</span>
-            </div>
+            <span id="activeStepIndicator" class="transcript-status">Click a step to jump</span>
           </div>
 
           <!-- Scrollable Lyrics-style Container -->
@@ -60,31 +44,6 @@
             >
               Your browser does not support the video tag.
             </video>
-
-            <!-- Minimal Toolbar: Fullscreen Lesson Mode Button -->
-            <div class="player-floating-bar">
-              <button
-                id="lessonFullscreenBtn"
-                type="button"
-                class="fullscreen-action-btn"
-                title="Toggle Fullscreen Lesson (with live timestamps)"
-                aria-label="Toggle Fullscreen Lesson Mode"
-              >
-                <svg class="icon-enter-fullscreen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <polyline points="9 21 3 21 3 15"></polyline>
-                  <line x1="21" y1="3" x2="14" y2="10"></line>
-                  <line x1="3" y1="21" x2="10" y2="14"></line>
-                </svg>
-                <svg class="icon-exit-fullscreen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                  <polyline points="4 14 10 14 10 20"></polyline>
-                  <polyline points="20 10 14 10 14 4"></polyline>
-                  <line x1="14" y1="10" x2="21" y2="3"></line>
-                  <line x1="3" y1="21" x2="10" y2="14"></line>
-                </svg>
-                <span id="fullscreenBtnText" class="fullscreen-btn-text">Fullscreen</span>
-              </button>
-            </div>
 
             <!-- Plain, clean error message if video cannot load -->
             <div id="videoErrorMessage" class="video-error-message" style="display: none;">
