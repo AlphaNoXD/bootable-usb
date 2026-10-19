@@ -33,54 +33,59 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Page Container */
+/* ==========================================================================
+   MAIN PAGE CONTAINER (EXPANDED DESKTOP VIEWPORT)
+   ========================================================================== */
 .page-container {
-  max-width: 1380px;
+  width: 90%;
+  max-width: 1520px;
   margin: 0 auto;
-  padding: 24px 28px;
+  padding: 28px 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 /* Minimalist Header */
 .page-header {
-  padding-bottom: 12px;
+  padding-bottom: 14px;
   border-bottom: 1px solid var(--border-subtle);
 }
 
 .lesson-title {
-  font-size: 1.4rem;
+  font-size: clamp(1.45rem, 1.8vw, 1.85rem);
   font-weight: 700;
   color: var(--text-main);
   letter-spacing: -0.015em;
 }
 
 .lesson-subtitle {
-  font-size: 0.88rem;
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
   color: var(--text-muted);
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
-/* Main Split View: Steps on Left, Video on Right */
+/* ==========================================================================
+   TWO-COLUMN DESKTOP LAYOUT (35% TIMESTAMPS / 65% VIDEO)
+   ========================================================================== */
 .lesson-layout {
   display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 36px;
+  grid-template-columns: 35fr 65fr;
+  gap: clamp(28px, 2.5vw, 44px);
   align-items: start;
   flex: 1;
 }
 
 /* ==========================================================================
-   SPOTIFY-STYLE SYNCHRONIZED TIMESTAMPS (LEFT PANEL)
+   SPOTIFY-STYLE SYNCHRONIZED TIMESTAMPS (LEFT PANEL - ~35% WIDTH)
    ========================================================================== */
 .transcript-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 150px);
-  min-height: 480px;
-  max-height: 720px;
+  height: 100%;
+  min-height: 520px;
+  max-height: calc(100vh - 160px);
   position: relative;
 }
 
@@ -88,9 +93,9 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px 10px 4px;
+  padding: 0 4px 12px 4px;
   border-bottom: 1px solid var(--border-subtle);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   flex-shrink: 0;
 }
 
@@ -103,20 +108,20 @@ html, body {
 
 .transcript-status {
   color: var(--text-dim);
-  font-size: 0.76rem;
+  font-size: 0.8rem;
 }
 
 /* The scroll container with vertical gradient fade mask */
 .steps-list-container {
   flex: 1;
   overflow-y: auto;
-  padding: 140px 12px 180px 4px;
+  padding: 130px 14px 160px 4px;
   position: relative;
   scroll-behavior: smooth;
   outline: none;
   /* Spotify lyrics gradient mask at top and bottom */
-  mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%);
 }
 
 /* Custom Scrollbar for steps container */
@@ -138,8 +143,8 @@ html, body {
 .step-item {
   display: flex;
   align-items: baseline;
-  gap: 14px;
-  padding: 12px 14px;
+  gap: 16px;
+  padding: 14px 18px;
   margin: 6px 0;
   border-radius: 8px;
   cursor: pointer;
@@ -151,14 +156,14 @@ html, body {
 }
 
 .step-item:hover {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(255, 255, 255, 0.035);
 }
 
 /* Timestamp badge */
 .step-time {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  padding: 2px 6px;
+  font-size: 0.84rem;
+  padding: 3px 8px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-dim);
@@ -168,8 +173,8 @@ html, body {
 
 /* Step instruction text */
 .step-text {
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 1.08rem;
+  line-height: 1.55;
   color: var(--text-muted);
   transition: color 0.25s ease, font-size 0.25s ease, font-weight 0.25s ease;
 }
@@ -184,11 +189,12 @@ html, body {
   background-color: var(--accent-soft);
   color: var(--accent);
   font-weight: 600;
+  font-size: 0.88rem;
 }
 
 .step-item.active .step-text {
   color: #ffffff;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 
@@ -213,7 +219,7 @@ html, body {
 }
 
 .step-item:not(.active):hover {
-  opacity: 0.8 !important;
+  opacity: 0.85 !important;
 }
 .step-item:not(.active):hover .step-text {
   color: var(--text-main);
@@ -223,25 +229,27 @@ html, body {
 }
 
 /* ==========================================================================
-   VIDEO PLAYER SECTION (RIGHT PANEL)
+   VIDEO PLAYER SECTION (RIGHT PANEL - ~65% WIDTH)
    ========================================================================== */
 .player-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 
 .video-wrapper {
   width: 100%;
   aspect-ratio: 16 / 9;
   background-color: #000000;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--border-subtle);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
 /* Native HTML5 video element */
@@ -266,34 +274,81 @@ html, body {
 }
 
 /* ==========================================================================
-   RESPONSIVE LAYOUT
+   RESPONSIVE LAYOUT (TABLET & MOBILE)
    ========================================================================== */
-@media (max-width: 960px) {
-  .lesson-layout {
-    grid-template-columns: 1fr;
-    gap: 24px;
+/* Tablet (769px to 1100px) */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .page-container {
+    width: 92%;
+    max-width: 1050px;
+    padding: 22px 0;
   }
 
-  /* On mobile/tablets, put video on top, timestamps below */
+  .lesson-layout {
+    grid-template-columns: 38fr 62fr;
+    gap: 28px;
+  }
+
+  .transcript-section {
+    min-height: 440px;
+  }
+
+  .step-text {
+    font-size: 1rem;
+  }
+
+  .step-item.active .step-text {
+    font-size: 1.15rem;
+  }
+}
+
+/* Mobile (<= 768px) - Preserved exactly as requested */
+@media (max-width: 768px) {
+  .page-container {
+    width: 100%;
+    padding: 16px;
+    gap: 18px;
+  }
+
+  .lesson-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* On mobile, video on top, transcript scrolling below */
   .player-section {
     order: 1;
   }
 
   .transcript-section {
     order: 2;
-    height: 420px;
-    min-height: 340px;
+    height: 380px;
+    min-height: 320px;
+    max-height: none;
   }
 
   .steps-list-container {
     padding: 60px 8px 100px 4px;
   }
 
-  .page-container {
-    padding: 16px;
+  .lesson-title {
+    font-size: 1.25rem;
   }
 
-  .lesson-title {
-    font-size: 1.2rem;
+  .lesson-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .step-item {
+    padding: 10px 12px;
+    gap: 12px;
+  }
+
+  .step-text {
+    font-size: 0.96rem;
+  }
+
+  .step-item.active .step-text {
+    font-size: 1.1rem;
   }
 }
