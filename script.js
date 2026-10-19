@@ -4,6 +4,7 @@
  * 
  * Classroom Lesson Website
  * Native HTML5 Cloudflare R2 Video & Spotify-Style Live Synchronized Timestamps
+ * With Custom Fullscreen Lesson Mode & Auto-Fading Overlay
  */
 
 // =========================================================================
@@ -65,11 +66,26 @@ let currentActiveIndex = -1;
 let isUserInteracting = false;
 let userInteractionTimeout = null;
 
+// Fullscreen & Overlay State
+let isFullscreen = false;
+let isOverlayPinned = false;
+let autoHideTimer = null;
+
 // DOM Elements
 const videoEl = document.getElementById("lessonVideo");
+const workspaceEl = document.getElementById("lessonWorkspace");
+const transcriptSectionEl = document.getElementById("transcriptSection");
 const stepsContainerEl = document.getElementById("stepsListContainer");
 const activeIndicatorEl = document.getElementById("activeStepIndicator");
 const videoErrorEl = document.getElementById("videoErrorMessage");
+
+// Fullscreen Controls
+const fullscreenBtn = document.getElementById("lessonFullscreenBtn");
+const fullscreenBtnText = document.getElementById("fullscreenBtnText");
+const iconEnterFullscreen = fullscreenBtn?.querySelector(".icon-enter-fullscreen");
+const iconExitFullscreen = fullscreenBtn?.querySelector(".icon-exit-fullscreen");
+const pinOverlayBtn = document.getElementById("pinOverlayBtn");
+const pinBtnLabel = document.getElementById("pinBtnLabel");
 
 // =========================================================================
 // 4. INITIALIZATION
@@ -78,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderStepsList();
   setupVideoListeners();
   setupScrollInteractionListener();
+  setupFullscreenManager();
   
   // Set initial active step at 0s
   updateActiveStep(0, false);
@@ -131,6 +148,11 @@ function seekToStep(index) {
   }
   
   updateActiveStep(index, true);
+
+  // If in fullscreen, show overlay and reset auto-hide timer
+  if (isFullscreen) {
+    showOverlayAndResetTimer();
+  }
 }
 
 // =========================================================================
@@ -144,19 +166,31 @@ function setupVideoListeners() {
 
   // Synchronize immediately on seek
   videoEl.addEventListener("seeking", onVideoTimeUpdate);
-  videoEl.addEventListener("seeked", onVideoTimeUpdate);
+  videoEl.addEventListener("seeked", () => {
+    onVideoTimeUpdate();
+    if (isFullscreen) showOverlayAndResetTimer();
+  });
 
   // Update status when play/pause changes
   videoEl.addEventListener("play", () => {
     updateIndicatorStatus();
+    if (isFullscreen) showOverlayAndResetTimer();
   });
 
   videoEl.addEventListener("pause", () => {
     updateIndicatorStatus();
+    // Keep instruction visible when paused
+    if (isFullscreen) {
+      transcriptSectionEl?.classList.remove("overlay-faded");
+      clearTimeout(autoHideTimer);
+    }
   });
 
   videoEl.addEventListener("ended", () => {
     updateIndicatorStatus();
+    if (isFullscreen) {
+      transcriptSectionEl?.classList.remove("overlay-faded");
+    }
   });
 
   // Handle loading errors gracefully
@@ -190,6 +224,7 @@ function onVideoTimeUpdate() {
 
 // Update DOM classes and center the active step
 function updateActiveStep(newIndex, shouldScroll = true) {
+  const isNewStep = newIndex !== currentActiveIndex;
   currentActiveIndex = newIndex;
 
   const items = stepsContainerEl.querySelectorAll(".step-item");
@@ -218,6 +253,11 @@ function updateActiveStep(newIndex, shouldScroll = true) {
   }
 
   updateIndicatorStatus();
+
+  // In fullscreen mode: when reaching a new timestamp, show overlay so learner can read it!
+  if (isFullscreen && isNewStep) {
+    showOverlayAndResetTimer();
+  }
 }
 
 // Smoothly centers the active step element in the container viewport
@@ -246,8 +286,18 @@ function setupScrollInteractionListener() {
   const onUserScroll = () => {
     isUserInteracting = true;
     clearTimeout(userInteractionTimeout);
+    
+    // Keep overlay visible while actively interacting
+    if (isFullscreen) {
+      transcriptSectionEl?.classList.remove("overlay-faded");
+      clearTimeout(autoHideTimer);
+    }
+
     userInteractionTimeout = setTimeout(() => {
       isUserInteracting = false;
+      if (isFullscreen) {
+        showOverlayAndResetTimer();
+      }
     }, 2800);
   };
 
@@ -273,7 +323,174 @@ function updateIndicatorStatus() {
 }
 
 // =========================================================================
-// 7. UTILITY FUNCTIONS
+// 7. FULLSCREEN LESSON MODE & AUTO-HIDE OVERLAY MANAGER
+// =========================================================================
+function setupFullscreenManager() {
+  if (!fullscreenBtn || !workspaceEl) return;
+
+  // Toggle fullscreen button click
+  fullscreenBtn.addEventListener("click", toggleLessonFullscreen);
+
+  // Pin overlay button click ("Keep steps visible")
+  if (pinOverlayBtn) {
+    pinOverlayBtn.addEventListener("click", () => {
+      isOverlayPinned = !isOverlayPinned;
+      pinOverlayBtn.setAttribute("aria-pressed", isOverlayPinned ? "true" : "false");
+      
+      if (isOverlayPinned) {
+        pinOverlayBtn.classList.add("active");
+        if (pinBtnLabel) pinBtnLabel.textContent = "Always visible";
+        transcriptSectionEl?.classList.add("is-pinned");
+        transcriptSectionEl?.classList.remove("overlay-faded");
+        clearTimeout(autoHideTimer);
+      } else {
+        pinOverlayBtn.classList.remove("active");
+        if (pinBtnLabel) pinBtnLabel.textContent = "Auto-hide";
+        transcriptSectionEl?.classList.remove("is-pinned");
+        if (isFullscreen) {
+          showOverlayAndResetTimer();
+        }
+      }
+    });
+  }
+
+  // User activity listeners to wake up overlay in fullscreen
+  const onUserActivity = () => {
+    if (!isFullscreen) return;
+    showOverlayAndResetTimer();
+  };
+
+  workspaceEl.addEventListener("mousemove", onUserActivity);
+  workspaceEl.addEventListener("touchstart", onUserActivity, { passive: true });
+  workspaceEl.addEventListener("click", onUserActivity);
+
+  // Sync state on native fullscreenchange & webkitfullscreenchange
+  document.addEventListener("fullscreenchange", handleFullscreenStateChange);
+  document.addEventListener("webkitfullscreenchange", handleFullscreenStateChange);
+
+  // Keyboard shortcut: 'f' or 'F' toggles fullscreen
+  window.addEventListener("keydown", (e) => {
+    const tag = document.activeElement ? document.activeElement.tagName.toLowerCase() : "";
+    if (tag === "input" || tag === "textarea") return;
+
+    if (e.key === "f" || e.key === "F") {
+      e.preventDefault();
+      toggleLessonFullscreen();
+    }
+  });
+}
+
+// Toggles Fullscreen on the entire lesson workspace
+async function toggleLessonFullscreen() {
+  const isCurrentlyFs = checkIsFullscreen();
+
+  if (!isCurrentlyFs) {
+    try {
+      if (workspaceEl.requestFullscreen) {
+        await workspaceEl.requestFullscreen();
+      } else if (workspaceEl.webkitRequestFullscreen) {
+        await workspaceEl.webkitRequestFullscreen();
+      } else {
+        // Fallback for mobile / browsers without element requestFullscreen
+        enterSimulatedFullscreen();
+      }
+    } catch (err) {
+      console.warn("Element fullscreen not permitted, activating simulated fallback:", err);
+      enterSimulatedFullscreen();
+    }
+  } else {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        await document.webkitExitFullscreen().catch(() => {});
+      }
+    }
+    exitSimulatedFullscreen();
+  }
+}
+
+function checkIsFullscreen() {
+  return Boolean(
+    document.fullscreenElement ||
+    document.webkitFullscreenElement ||
+    workspaceEl?.classList.contains("is-fullscreen")
+  );
+}
+
+function handleFullscreenStateChange() {
+  const fsActive = checkIsFullscreen();
+  isFullscreen = fsActive;
+
+  if (fsActive) {
+    workspaceEl.classList.add("is-fullscreen");
+    document.body.classList.add("fullscreen-active");
+    if (iconEnterFullscreen) iconEnterFullscreen.style.display = "none";
+    if (iconExitFullscreen) iconExitFullscreen.style.display = "inline-block";
+    if (fullscreenBtnText) fullscreenBtnText.textContent = "Exit Fullscreen";
+    
+    // Show overlay immediately on entering fullscreen
+    showOverlayAndResetTimer();
+
+    // Re-center active step for new fullscreen dimensions
+    setTimeout(() => {
+      centerActiveStep(currentActiveIndex);
+    }, 150);
+  } else {
+    workspaceEl.classList.remove("is-fullscreen");
+    document.body.classList.remove("fullscreen-active");
+    if (iconEnterFullscreen) iconEnterFullscreen.style.display = "inline-block";
+    if (iconExitFullscreen) iconExitFullscreen.style.display = "none";
+    if (fullscreenBtnText) fullscreenBtnText.textContent = "Fullscreen Lesson";
+    
+    // Reset overlay visibility
+    transcriptSectionEl?.classList.remove("overlay-faded");
+    clearTimeout(autoHideTimer);
+
+    // Re-center active step for normal layout
+    setTimeout(() => {
+      centerActiveStep(currentActiveIndex);
+    }, 150);
+  }
+}
+
+// Simulated fallback for mobile devices (e.g. iOS Safari)
+function enterSimulatedFullscreen() {
+  workspaceEl.classList.add("is-fullscreen");
+  document.body.classList.add("fullscreen-active");
+  handleFullscreenStateChange();
+}
+
+function exitSimulatedFullscreen() {
+  workspaceEl.classList.remove("is-fullscreen");
+  document.body.classList.remove("fullscreen-active");
+  handleFullscreenStateChange();
+}
+
+// Shows the overlay and fades out after 4 seconds of inactivity
+function showOverlayAndResetTimer() {
+  if (!isFullscreen || !transcriptSectionEl) return;
+
+  // Make visible
+  transcriptSectionEl.classList.remove("overlay-faded");
+  clearTimeout(autoHideTimer);
+
+  // If pinned, do not set fade timer
+  if (isOverlayPinned) return;
+
+  // Fade out after 4 seconds if video is playing and user is not scrolling
+  autoHideTimer = setTimeout(() => {
+    if (!isFullscreen || isOverlayPinned) return;
+    if (isUserInteracting) return;
+    // Keep instruction visible if video is paused
+    if (videoEl && videoEl.paused) return;
+
+    transcriptSectionEl.classList.add("overlay-faded");
+  }, 4000);
+}
+
+// =========================================================================
+// 8. UTILITY FUNCTIONS
 // =========================================================================
 function parseTimeToSeconds(timeVal) {
   if (typeof timeVal === "number") return timeVal;
