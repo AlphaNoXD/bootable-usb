@@ -24,7 +24,7 @@
 
 html, body {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background-color: var(--bg-color);
   color: var(--text-main);
   font-family: var(--font-sans);
@@ -34,66 +34,69 @@ html, body {
 }
 
 /* ==========================================================================
-   MAIN PAGE CONTAINER (EXPANDED DESKTOP VIEWPORT)
+   PAGE CONTAINER - EXPANDED TO 96% VIEWPORT ON DESKTOP
    ========================================================================== */
 .page-container {
-  width: 90%;
-  max-width: 1520px;
+  width: 96%;
+  max-width: 2200px;
   margin: 0 auto;
-  padding: 28px 0;
+  padding: 20px 0 32px 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 /* Minimalist Header */
 .page-header {
-  padding-bottom: 14px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--border-subtle);
+  width: 100%;
 }
 
 .lesson-title {
-  font-size: clamp(1.45rem, 1.8vw, 1.85rem);
+  font-size: clamp(1.4rem, 1.8vw, 1.85rem);
   font-weight: 700;
   color: var(--text-main);
   letter-spacing: -0.015em;
 }
 
 .lesson-subtitle {
-  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+  font-size: clamp(0.88rem, 1vw, 1.02rem);
   color: var(--text-muted);
   margin-top: 4px;
 }
 
 /* ==========================================================================
-   TWO-COLUMN DESKTOP LAYOUT (35% TIMESTAMPS / 65% VIDEO)
+   DESKTOP TWO-COLUMN LAYOUT (30% TIMESTAMPS / 70% VIDEO)
    ========================================================================== */
 .lesson-layout {
   display: grid;
-  grid-template-columns: 35fr 65fr;
-  gap: clamp(28px, 2.5vw, 44px);
-  align-items: start;
+  grid-template-columns: minmax(320px, 30%) minmax(0, 70%);
+  gap: clamp(24px, 2.5vw, 42px);
+  align-items: stretch;
   flex: 1;
+  width: 100%;
 }
 
 /* ==========================================================================
-   SPOTIFY-STYLE SYNCHRONIZED TIMESTAMPS (LEFT PANEL - ~35% WIDTH)
+   SPOTIFY-STYLE TIMESTAMPS PANEL (LEFT COLUMN - 30% WIDTH)
    ========================================================================== */
 .transcript-section {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 520px;
-  max-height: calc(100vh - 160px);
+  min-height: 0;
   position: relative;
+  width: 100%;
+  min-width: 0;
 }
 
 .transcript-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px 12px 4px;
+  padding: 0 4px 10px 4px;
   border-bottom: 1px solid var(--border-subtle);
   font-size: 0.85rem;
   flex-shrink: 0;
@@ -111,17 +114,18 @@ html, body {
   font-size: 0.8rem;
 }
 
-/* The scroll container with vertical gradient fade mask */
+/* Scroll container with Spotify-lyrics vertical fade mask */
 .steps-list-container {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 130px 14px 160px 4px;
+  padding: 130px 14px 170px 4px;
   position: relative;
   scroll-behavior: smooth;
   outline: none;
-  /* Spotify lyrics gradient mask at top and bottom */
-  mask-image: linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%);
+  /* Top and bottom gradient fade mask */
+  mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
 }
 
 /* Custom Scrollbar for steps container */
@@ -229,13 +233,14 @@ html, body {
 }
 
 /* ==========================================================================
-   VIDEO PLAYER SECTION (RIGHT PANEL - ~65% WIDTH)
+   LARGE VIDEO PLAYER SECTION (RIGHT COLUMN - 70% WIDTH)
    ========================================================================== */
 .player-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 100%;
+  min-width: 0;
 }
 
 .video-wrapper {
@@ -249,7 +254,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 /* Native HTML5 video element */
@@ -274,19 +279,18 @@ html, body {
 }
 
 /* ==========================================================================
-   RESPONSIVE LAYOUT (TABLET & MOBILE)
+   RESPONSIVE BREAKPOINTS (TABLET & MOBILE)
    ========================================================================== */
-/* Tablet (769px to 1100px) */
-@media (min-width: 769px) and (max-width: 1100px) {
+/* Tablet (769px to 1099px) */
+@media (min-width: 769px) and (max-width: 1099px) {
   .page-container {
-    width: 92%;
-    max-width: 1050px;
-    padding: 22px 0;
+    width: 94%;
+    padding: 18px 0;
   }
 
   .lesson-layout {
-    grid-template-columns: 38fr 62fr;
-    gap: 28px;
+    grid-template-columns: minmax(280px, 35%) minmax(0, 65%);
+    gap: 24px;
   }
 
   .transcript-section {
@@ -302,7 +306,7 @@ html, body {
   }
 }
 
-/* Mobile (<= 768px) - Preserved exactly as requested */
+/* Mobile (<= 768px) - Preserved unchanged */
 @media (max-width: 768px) {
   .page-container {
     width: 100%;
@@ -315,7 +319,7 @@ html, body {
     gap: 20px;
   }
 
-  /* On mobile, video on top, transcript scrolling below */
+  /* On mobile: video on top, transcript scrolling below */
   .player-section {
     order: 1;
   }
