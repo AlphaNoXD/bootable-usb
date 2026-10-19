@@ -14,31 +14,31 @@
 export const LESSON_STEPS = [
   {
     time: "00:00",
-    text: "Prepare the USB flash drive and ensure all personal files are backed up."
+    text: "Plug in the usb flash drive."
   },
   {
-    time: "00:35",
-    text: "Download and launch the bootable USB creation tool (e.g. Rufus or BalenaEtcher)."
+    time: "00:15",
+    text: "Backup your important USB files to your computer."
   },
   {
-    time: "01:10",
-    text: "Select the target USB drive and load the operating system ISO file."
+    time: "01:05",
+    text: "Locate where your rufus is downloaded and launch it."
   },
   {
-    time: "01:50",
-    text: "Configure the partition scheme (GPT for modern UEFI, MBR for legacy BIOS)."
+    time: "01:15",
+    text: "Set-up Rufus according to the video.\n  (Breakdown):\n   Image option: Disk or ISO img\n   Click on Select and locate your iso file.\n   Partition scheme: MBR\n   Target System: BIOS\n   Else is set to default."
   },
   {
-    time: "02:30",
-    text: "Confirm the format warning and start writing the image to the drive."
+    time: "01:52",
+    text: "Wait until Rufus finish the extraction."
   },
   {
-    time: "03:15",
-    text: "Wait for the file extraction and block writing progress to complete."
+    time: "03:01",
+    text: "Verify if the flash drive has the files inside."
   },
   {
-    time: "03:50",
-    text: "Safely eject the finished bootable USB drive and test booting on your PC."
+    time: "03:25",
+    text: "Copy the backed up folder from your computer back to your flash drive."
   }
 ];
 
