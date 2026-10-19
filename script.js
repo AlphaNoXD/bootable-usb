@@ -26,7 +26,7 @@ export const LESSON_STEPS = [
   },
   {
     time: "01:15",
-    text: "Set-up Rufus according to the video.<br>  (Breakdown):<br>   Image option: Disk or ISO img<br>   Click on Select and locate your iso file.<br>   Partition scheme: MBR<br>   Target System: BIOS<br>   Else is set to default."
+    text: "Set-up Rufus according to the video.\n  (Breakdown):\n   Image option: Disk or ISO img\n   Click on Select and locate your iso file.\n   Partition scheme: MBR\n   Target System: BIOS\n   Else is set to default."
   },
   {
     time: "01:52",
