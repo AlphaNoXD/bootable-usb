@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to Make a Bootable USB Drive</title>
+    <meta name="description" content="Step-by-step video lesson on creating a bootable USB drive, featuring synchronized interactive timestamps." />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page-container">
+      <!-- Header -->
+      <header class="page-header">
+        <h1 class="lesson-title">How to Make a Bootable USB Drive</h1>
+        <p class="lesson-subtitle">Classroom walkthrough with live synchronized steps</p>
+      </header>
+
+      <!-- Main Layout: Spotify-style Timestamps (Left) & Video (Right) -->
+      <main class="lesson-layout">
+        <!-- Left: Spotify-style Synchronized Steps List -->
+        <section class="transcript-section" aria-label="Lesson steps">
+          <div class="transcript-header">
+            <span class="transcript-label">Lesson Steps</span>
+            <span id="activeStepIndicator" class="transcript-status">Click a step to jump</span>
+          </div>
+
+          <!-- Scrollable Lyrics-style Container -->
+          <div id="stepsListContainer" class="steps-list-container" tabindex="0" aria-label="Synchronized step instructions">
+            <!-- Dynamically populated from LESSON_STEPS in script.js -->
+          </div>
+        </section>
+
+        <!-- Right: Video Player -->
+        <section class="player-section" aria-label="Video lesson">
+          <div class="video-wrapper">
+            <!-- Native HTML5 Video Element -->
+            <video
+              id="lessonVideo"
+              class="lesson-video"
+              controls
+              playsinline
+              preload="metadata"
+              src="https://pub-f66d430043214809bbc226d0d6a0fda9.r2.dev/2026-10-18%2021-15-53.mp4"
+            >
+              Your browser does not support the video tag.
+            </video>
+
+            <!-- Plain, clean error message if video cannot load -->
+            <div id="videoErrorMessage" class="video-error-message" style="display: none;">
+              <p>Unable to load the video. Please check your internet connection and refresh the page.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Application Script -->
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>

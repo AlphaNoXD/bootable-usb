@@ -1,0 +1,6 @@
+{
+  "name": "Bootable USB Drive Video Masterclass",
+  "description": "Interactive educational video player with synchronized step-by-step timestamps, custom HTML5 controls, Google Drive integration, and live lesson editor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
